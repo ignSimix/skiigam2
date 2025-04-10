@@ -9,6 +9,7 @@ public class SnowmanThrow : MonoBehaviour
     public int throwSpeed;
     private bool justThown = false;
     private GameObject target;
+    private Vector3 upwardsOffset = new Vector3(0, 0.33f, 0);
 
     // Start is called before the first frame update
     void Start()
@@ -25,22 +26,24 @@ public class SnowmanThrow : MonoBehaviour
 
             if (distanceToTarget < throwDistance&&justThown==false)
             {
-                justThown = true;
-                GameObject tempSnowBall = Instantiate(snowBall,transform.position,transform.rotation);
-                Rigidbody tempRb = tempSnowBall.GetComponent<Rigidbody>();
-                Vector3 targetDirection =  Vector3.Normalize(target.transform.position-transform.position);
-            
-                //Add a small throw angle
-                targetDirection += new Vector3(0, 0.33f, 0);
-                tempRb.AddForce(targetDirection * throwSpeed);
-                Invoke("ThrowOver", 0.1f);
+                ThrowSnowbal();
             }
         }
-       
-
-
     }
 
+
+    private void ThrowSnowbal()
+    {
+        justThown = true;
+        GameObject tempSnowBall = Instantiate(snowBall,transform.position,transform.rotation);
+        Rigidbody tempRb = tempSnowBall.GetComponent<Rigidbody>();
+        Vector3 targetDirection =  Vector3.Normalize(target.transform.position-transform.position);
+            
+        //Add a small throw angle
+        targetDirection += upwardsOffset;
+        tempRb.AddForce(targetDirection * throwSpeed);
+        Invoke("ThrowOver", 0.1f); 
+    }
     void ThrowOver()
     {
         justThown = false;
